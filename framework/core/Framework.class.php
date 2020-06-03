@@ -71,9 +71,23 @@ class Framework
         session_start();
     }
 
+    // Autoloading
     private static function autoload()
     {
+        spl_autoload_register(array(__CLASS__,  'load'));
+    }
 
+    // Define a custom load method
+    private static function load($classname)
+    {
+        // Here simply autoload app's controller and model classes
+        if (substr($classname, -10) == "Controller") {
+            // Controller
+            require_once CURR_CONTROLLER_PATH . "$classname.class.php";
+        } elseif (substr($classname, -5) == "Model") {
+            // Model
+            require_once MODEL_PATH . "$classname.class.php";
+        }
     }
 
     private static function dispatch()
